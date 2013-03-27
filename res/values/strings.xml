@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="issue_title">Заголовок сообщения</string>
+    <string name="issue_text">Текст сообщения</string>
+    <string name="menu_send">Отправить</string>
+    <string name="progressdialog_wait">Минуточку</string>
+    <string name="dialog_result_ok_title">Отправлено</string>
+    <string name="dialog_result_ok_text">Сообщение было успешно отправлено</string>
+    <string name="dialog_result_exc_title">Ошибка</string>
+    <string name="dialog_result_exc_text">Отправка сообщения не удалась. Проверьте состояние подключения.</string>
+
+</resources>

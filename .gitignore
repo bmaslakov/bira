@@ -1,0 +1,9 @@
+# generated #
+###################
+bin/
+gen/
+assets/
+proguard-project.txt
+project.properties
+.classpath
+.project

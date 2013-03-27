@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReportActivity" >
+
+    <EditText
+        android:id="@+id/editTextIssueTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/issue_title" >
+        <requestFocus />
+    </EditText>
+
+    <Spinner
+        android:id="@+id/spinnerIssueType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/issue_types"/>
+
+    <EditText
+        android:id="@+id/editTextIssueBody"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/issue_text"
+        android:gravity="left|top" />
+
+</LinearLayout>
