@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="issue_types">
-        <item>Bug</item>
-        <item>Proposal</item>
+        <item>Баг</item>
+        <item>Предложение</item>
     </string-array>
 
 </resources>
