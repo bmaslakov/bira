@@ -3,10 +3,11 @@
     <string name="issue_title">Issue title</string>
     <string name="issue_text">Description</string>
     <string name="menu_send">Send</string>
-    <string name="progressdialog_wait">Wait a second</string>
+    <string name="progressdialog_wait">Wait a second, please...</string>
     <string name="dialog_result_ok_title">Done</string>
     <string name="dialog_result_ok_text">Issue has been created</string>
     <string name="dialog_result_exc_title">Error</string>
     <string name="dialog_result_exc_text">Unable to create issue. Please check your Internet connection and try again.</string>
+    <string name="dialog_result_exc_auth_text">Authrization error - please report this issue manually.</string>
 
 </resources>

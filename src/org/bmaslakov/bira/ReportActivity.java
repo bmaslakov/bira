@@ -1,5 +1,11 @@
 package org.bmaslakov.bira;
 
+import java.io.IOException;
+
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
+
 import com.example.bitbucketissuereporter.R;
 
 import android.os.AsyncTask;
@@ -88,9 +94,19 @@ public class ReportActivity extends Activity {
                 pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             } catch (NameNotFoundException e) {
             }
-            result = issueReporter.report(mEditTextIssueTitle.getText()
-                    .toString(), mEditTextIssueBody.getText().toString(),
-                    mSpinnerIssueType.getSelectedItemPosition(), pInfo);
+            try {
+                result = issueReporter.report(mEditTextIssueTitle.getText()
+                        .toString(), mEditTextIssueBody.getText().toString(),
+                        mSpinnerIssueType.getSelectedItemPosition(), pInfo);
+            } catch (OAuthCommunicationException e) {
+                result = -2;
+            } catch (OAuthMessageSignerException e) {
+                result = -2;
+            } catch (OAuthExpectationFailedException e) {
+                result = -2;
+            } catch (IOException e) {
+                result = -1;
+            }
             return null;
         }
 
@@ -115,6 +131,9 @@ public class ReportActivity extends Activity {
             } else if (result == -1) {
                 builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
                 builder.setMessage(getResources().getText(R.string.dialog_result_exc_text));
+            } else if (result == -2) {
+                builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
+                builder.setMessage(getResources().getText(R.string.dialog_result_exc_auth_text));
             } else {
                 builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
                 builder.setMessage("HTTP Response Code: " + result);

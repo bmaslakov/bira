@@ -22,7 +22,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 public class ACRAReportSender implements org.acra.sender.ReportSender {
-    private final static String NEW_LINE        = "  \n";
+    private final static String NEW_LINE = "  \n";
 
     private final AccountData accountData;
 
@@ -64,6 +64,9 @@ public class ACRAReportSender implements org.acra.sender.ReportSender {
             .append(errorContent.get(ReportField.ANDROID_VERSION))
             .append(NEW_LINE)
             .append(errorContent.get(ReportField.DISPLAY).replace("\n", "  \n"))
+            .append(NEW_LINE)
+            .append("##Custom data\n")
+            .append(errorContent.get(ReportField.CUSTOM_DATA))
             .append(NEW_LINE)
             .append("##User comment\n")
             .append(errorContent.get(ReportField.USER_COMMENT))

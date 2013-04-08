@@ -8,5 +8,6 @@
     <string name="dialog_result_ok_text">Сообщение было успешно отправлено</string>
     <string name="dialog_result_exc_title">Ошибка</string>
     <string name="dialog_result_exc_text">Отправка сообщения не удалась. Проверьте состояние подключения.</string>
+    <string name="dialog_result_exc_auth_text">Возникла непредвиденная ошибка авторизации - свяжитесь с разработчиком.</string>
 
 </resources>

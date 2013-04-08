@@ -1,6 +1,9 @@
 package org.bmaslakov.bira;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -10,6 +13,8 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
+import org.acra.ACRA;
+import org.acra.collector.CrashReportDataFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,10 +27,9 @@ import org.apache.http.util.EntityUtils;
 import android.content.pm.PackageInfo;
 
 public class IssueReporter {
+    private final static String NEW_LINE = "  \n";
     public final static int MODE_BUG      = 0;
     public final static int MODE_PROPOSAL = 1;
-
-    private final static String NEW_LINE  = "  \n";
 
     private final AccountData accountData;
 
@@ -38,12 +42,36 @@ public class IssueReporter {
     }
 
     @SuppressWarnings("unused")
-    public int report(String title, String text, int mode, PackageInfo app) {
+    public int report(String title, String text, int mode, PackageInfo app)
+            throws IOException, OAuthCommunicationException,
+            OAuthMessageSignerException, OAuthExpectationFailedException {
         CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(accountData.getConsumerKey(), accountData.getConsumerSecret());
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(accountData.getTargetUrl());
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
         nameValuePairs.add(new BasicNameValuePair("title", title));
+
+        String customInfoString = "";
+        try {
+            // Some black magic with accessing private fields in ACRA...
+            Field field = ACRA.getErrorReporter().getClass().getDeclaredField("crashReportDataFactory");
+            field.setAccessible(true);
+            CrashReportDataFactory crashReportDataFactory = (CrashReportDataFactory) field.get(ACRA.getErrorReporter());
+            Method method = CrashReportDataFactory.class.getDeclaredMethod("createCustomInfoString");
+            method.setAccessible(true);
+            customInfoString = (String) method.invoke(crashReportDataFactory);
+        } catch (IllegalArgumentException e) {
+            //Doing it silent
+        } catch (IllegalAccessException e) {
+            //Doing it silent
+        } catch (NoSuchFieldException e) {
+            //Doing it silent
+        } catch (InvocationTargetException e) {
+            //Doing it silent
+        } catch (NoSuchMethodException e) {
+            //Doing it silent
+        }
+
         StringBuilder contentBuilder = new StringBuilder()
             .append("##Date\n")
             .append(java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()))
@@ -65,6 +93,8 @@ public class IssueReporter {
             .append(" android ")
             .append(android.os.Build.VERSION.RELEASE)
             .append(NEW_LINE)
+            .append("##Custom data\n")
+            .append(customInfoString)
             .append("##User comment\n")
             .append(text);
         String content = contentBuilder.toString();
@@ -75,22 +105,11 @@ public class IssueReporter {
             nameValuePairs.add(new BasicNameValuePair("kind", "proposal"));
         else
             throw new IllegalArgumentException("Mode=" + mode + " is not permitted");
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
-            consumer.sign(httpPost);
-            HttpResponse response = httpClient.execute(httpPost);
-            int responseCode = response.getStatusLine().getStatusCode();
-            String responseBody = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
-            return responseCode;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (OAuthMessageSignerException e) {
-            e.printStackTrace();
-        } catch (OAuthExpectationFailedException e) {
-            e.printStackTrace();
-        } catch (OAuthCommunicationException e) {
-            e.printStackTrace();
-        }
-        return -1;
+        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
+        consumer.sign(httpPost);
+        HttpResponse response = httpClient.execute(httpPost);
+        int responseCode = response.getStatusLine().getStatusCode();
+        String responseBody = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+        return responseCode;
     }
 }
