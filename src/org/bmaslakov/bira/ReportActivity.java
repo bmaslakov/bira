@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+@SuppressLint("Registered")
 public class ReportActivity extends Activity {
     public static final String EXTRA_NAME_ACCOUNT_DATA = "org.bmaslakov.bitbucketreporter.EXTRA_NAME_ACCOUNT_DATA";
 

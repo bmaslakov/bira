@@ -41,7 +41,7 @@ public class ACRAReportSender implements org.acra.sender.ReportSender {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(accountData.getTargetUrl());
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("title", "bug report " + errorContent.get(ReportField.REPORT_ID)));
+        nameValuePairs.add(new BasicNameValuePair("title", "[BIRA] Bug report v. " + errorContent.get(ReportField.APP_VERSION_NAME)));
         StringBuilder contentBuilder = new StringBuilder()
             .append("##Date\n")
             .append(errorContent.get(ReportField.USER_CRASH_DATE))
