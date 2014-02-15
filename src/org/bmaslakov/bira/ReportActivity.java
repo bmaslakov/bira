@@ -5,16 +5,6 @@ import java.io.IOException;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-
-import com.example.bitbucketissuereporter.R;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -23,6 +13,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 @SuppressLint("Registered")
 public class ReportActivity extends Activity {
@@ -39,10 +36,11 @@ public class ReportActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountData = getIntent().getParcelableExtra(EXTRA_NAME_ACCOUNT_DATA);
-        if (accountData == null)
+        if (accountData == null) {
             throw new IllegalArgumentException(
                     "EXTRA_NAME_ACCOUNT_DATA of type "
                             + "BitbucketAccountData must be passed to ReportActivity");
+        }
         issueReporter = new IssueReporter(accountData);
         setContentView(R.layout.activity_report);
         mEditTextIssueTitle = (EditText) findViewById(R.id.editTextIssueTitle);
@@ -127,16 +125,23 @@ public class ReportActivity extends Activity {
                         }
                     });
             if (result == 200) {
-                builder.setTitle(getResources().getText(R.string.dialog_result_ok_title));
-                builder.setMessage(getResources().getText(R.string.dialog_result_ok_text));
+                builder.setTitle(getResources().getText(
+                        R.string.dialog_result_ok_title));
+                builder.setMessage(getResources().getText(
+                        R.string.dialog_result_ok_text));
             } else if (result == -1) {
-                builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
-                builder.setMessage(getResources().getText(R.string.dialog_result_exc_text));
+                builder.setTitle(getResources().getText(
+                        R.string.dialog_result_exc_title));
+                builder.setMessage(getResources().getText(
+                        R.string.dialog_result_exc_text));
             } else if (result == -2) {
-                builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
-                builder.setMessage(getResources().getText(R.string.dialog_result_exc_auth_text));
+                builder.setTitle(getResources().getText(
+                        R.string.dialog_result_exc_title));
+                builder.setMessage(getResources().getText(
+                        R.string.dialog_result_exc_auth_text));
             } else {
-                builder.setTitle(getResources().getText(R.string.dialog_result_exc_title));
+                builder.setTitle(getResources().getText(
+                        R.string.dialog_result_exc_title));
                 builder.setMessage("HTTP Response Code: " + result);
             }
             builder.create().show();
