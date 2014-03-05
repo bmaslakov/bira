@@ -37,9 +37,8 @@ public class ReportActivity extends Activity {
         super.onCreate(savedInstanceState);
         accountData = getIntent().getParcelableExtra(EXTRA_NAME_ACCOUNT_DATA);
         if (accountData == null) {
-            throw new IllegalArgumentException(
-                    "EXTRA_NAME_ACCOUNT_DATA of type "
-                            + "BitbucketAccountData must be passed to ReportActivity");
+            finish();
+            return;
         }
         issueReporter = new IssueReporter(accountData);
         setContentView(R.layout.activity_report);
